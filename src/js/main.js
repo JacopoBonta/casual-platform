@@ -10,16 +10,17 @@
   */
 var groundGroup;
 
-const game = new Phaser.Game(800 * 2, 600, Phaser.AUTO, 'game', {
+const game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
   // It is called first and used to load game assets
   preload() {
-    game.load.image('groundSprite', 'assets/platform.png');
-    game.load.image('groundSpriteStart', 'assets/platform-start.png');
-    game.load.image('groundSpriteEnd', 'assets/platform-end.png');
+    game.load.image('ground', 'assets/platform_48x48.bmp');
+    game.load.image('sky', 'assets/sky_800x600.png');
   },
   // Called once after preload(). Use it for various initializatoin of the current state.
   create() {
     printGameInfo();
+
+    game.add.sprite(0,0,'sky');
 
     createGround({
       offset: 80,
@@ -55,7 +56,7 @@ function createGround(conf = {}) {
   groundGroup.enableBody = true;
   
   // Place starting platform
-  platform = groundGroup.create(0, game.world.height - 64, 'groundSpriteStart');
+  platform = groundGroup.create(0, game.world.height - 64, 'ground');
   platform.scale.setTo(3, 1);
   platform.body.immovable = true;
   nextPlatformXPos = 144 + offsetX;
@@ -71,7 +72,7 @@ function createGround(conf = {}) {
     let platformLength = platformScaleX * 48;
     
     if (nextPlatformXPos + platformLength < game.world.width - 144) {
-      platform = groundGroup.create(nextPlatformXPos, offsetY, 'groundSprite');
+      platform = groundGroup.create(nextPlatformXPos, offsetY, 'ground');
       platform.scale.setTo(platformScaleX, 1);
       platform.body.immovable = true;
     }    
@@ -80,7 +81,7 @@ function createGround(conf = {}) {
   }
 
   // Place ending platform
-  platform = groundGroup.create(game.world.width - 144, game.world.height - 64, 'groundSpriteEnd');
+  platform = groundGroup.create(game.world.width - 144, game.world.height - 64, 'ground');
   platform.scale.setTo(3, 1);
   platform.body.immovable = true;
 
