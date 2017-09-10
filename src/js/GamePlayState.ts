@@ -2,6 +2,7 @@ class GamePlayState extends Phaser.State {
     game: Phaser.Game;
     player: Phaser.Sprite;
     groundGroup: Phaser.Group;
+    cursors: Phaser.CursorKeys;
 
     constructor() {
         super();
@@ -10,7 +11,7 @@ class GamePlayState extends Phaser.State {
     preload() {
         this.game.load.image('ground', 'assets/platform_48x48.bmp');
         this.game.load.image('sky', 'assets/sky_800x600.png');
-        this.game.load.spritesheet('player', 'assets/stickman.png', 100, 120);
+        this.game.load.spritesheet('player', 'assets/stickman.png', 100, 120, 7);
     }
 
     create() {
@@ -18,14 +19,46 @@ class GamePlayState extends Phaser.State {
         this.game.add.sprite(0, 0, 'sky');
         this.createGround(80, 80);
         this.createStickman();
+
+        // create the cursor key object
+        this.cursors = this.game.input.keyboard.createCursorKeys();
     }
 
     update() {
         //  Collide the player with the platforms
         let hitPlatform = this.game.physics.arcade.collide(this.player, this.groundGroup);
+        let player = this.player;
+        let cursors = this.cursors;
+
+        //  Reset the players velocity (movement)
+        player.body.velocity.x = 0;
+
+        if (cursors.left.isDown) {
+            //  Move to the left
+            player.body.velocity.x = -200;
+            player.scale.setTo(-1,1);
+            player.animations.play('left');
+        }
+        else if (cursors.right.isDown) {
+            //  Move to the right
+            player.body.velocity.x = 200;
+            player.scale.setTo(1,1);
+            player.animations.play('right');
+        }
+        else {
+            //  Stand still
+            player.animations.stop();
+
+            player.frame = 3;
+        }
+
+        //  Allow the player to jump if they are touching the ground.
+        if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
+            player.body.velocity.y = -350;
+        }
     }
 
-    printGameInfo() : void {
+    printGameInfo(): void {
         console.log(`World height: ${this.game.world.height}\nWorld width: ${this.game.world.width}`);
     }
 
@@ -74,22 +107,23 @@ class GamePlayState extends Phaser.State {
 
     }
 
-    createStickman(){
+    createStickman() {
         // The player and its settings
         this.player = this.game.add.sprite(32, this.game.world.height - 200, 'player');
 
         //  We need to enable physics on the player
         this.game.physics.arcade.enable(this.player);
 
-        this.player.body.setSize(58,69,10,30);
+        this.player.body.setSize(45, 73, 10, 30);
+        this.player.anchor.setTo(.5,.5);
 
         //  Player physics properties. Give the little guy a slight bounce.
         this.player.body.bounce.y = 0.2;
-        this.player.body.gravity.y = 300;
+        this.player.body.gravity.y = 700;
         this.player.body.collideWorldBounds = true;
 
         //  Our two animations, walking left and right.
-        this.player.animations.add('left', [0,1,2,3,4,5,6], 10, true);
-        this.player.animations.add('right', [0,1,2,3,4,5,6], 10, true);
+        this.player.animations.add('left', [0, 1, 2, 3, 4, 5, 6], 20, true);
+        this.player.animations.add('right', [0, 1, 2, 3, 4, 5, 6], 20, true);
     }
 }

@@ -5,16 +5,37 @@ class GamePlayState extends Phaser.State {
     preload() {
         this.game.load.image('ground', 'assets/platform_48x48.bmp');
         this.game.load.image('sky', 'assets/sky_800x600.png');
-        this.game.load.spritesheet('player', 'assets/stickman.png', 100, 120);
+        this.game.load.spritesheet('player', 'assets/stickman.png', 100, 120, 7);
     }
     create() {
         this.printGameInfo();
         this.game.add.sprite(0, 0, 'sky');
         this.createGround(80, 80);
         this.createStickman();
+        this.cursors = this.game.input.keyboard.createCursorKeys();
     }
     update() {
         let hitPlatform = this.game.physics.arcade.collide(this.player, this.groundGroup);
+        let player = this.player;
+        let cursors = this.cursors;
+        player.body.velocity.x = 0;
+        if (cursors.left.isDown) {
+            player.body.velocity.x = -200;
+            player.scale.setTo(-1, 1);
+            player.animations.play('left');
+        }
+        else if (cursors.right.isDown) {
+            player.body.velocity.x = 200;
+            player.scale.setTo(1, 1);
+            player.animations.play('right');
+        }
+        else {
+            player.animations.stop();
+            player.frame = 3;
+        }
+        if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
+            player.body.velocity.y = -350;
+        }
     }
     printGameInfo() {
         console.log(`World height: ${this.game.world.height}\nWorld width: ${this.game.world.width}`);
@@ -48,11 +69,12 @@ class GamePlayState extends Phaser.State {
     createStickman() {
         this.player = this.game.add.sprite(32, this.game.world.height - 200, 'player');
         this.game.physics.arcade.enable(this.player);
-        this.player.body.setSize(58, 69, 10, 30);
+        this.player.body.setSize(45, 73, 10, 30);
+        this.player.anchor.setTo(.5, .5);
         this.player.body.bounce.y = 0.2;
-        this.player.body.gravity.y = 300;
+        this.player.body.gravity.y = 700;
         this.player.body.collideWorldBounds = true;
-        this.player.animations.add('left', [0, 1, 2, 3, 4, 5, 6], 10, true);
-        this.player.animations.add('right', [0, 1, 2, 3, 4, 5, 6], 10, true);
+        this.player.animations.add('left', [0, 1, 2, 3, 4, 5, 6], 20, true);
+        this.player.animations.add('right', [0, 1, 2, 3, 4, 5, 6], 20, true);
     }
 }
