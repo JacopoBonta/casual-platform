@@ -1,26 +1,21 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var GamePlayState_1 = require("./GamePlayState");
 var Game;
 (function (Game) {
-    var CasualPlatform = (function () {
-        function CasualPlatform() {
+    class CasualPlatform {
+        constructor() {
             this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
                 create: this.create, preload: this.preload
             });
         }
-        CasualPlatform.prototype.preload = function () {
+        preload() {
             this.game.load.image('ground', 'assets/platform_48x48.bmp');
             this.game.load.image('sky', 'assets/sky_800x600.png');
-        };
-        CasualPlatform.prototype.create = function () {
-            this.game.state.add("GamePlayState", GamePlayState_1.GameStates.GamePlayState, true);
-        };
-        return CasualPlatform;
-    }());
+        }
+        create() {
+            this.game.state.add("GamePlayState", GamePlayState, true);
+        }
+    }
     Game.CasualPlatform = CasualPlatform;
 })(Game || (Game = {}));
-window.onload = function () {
+window.onload = () => {
     var game = new Game.CasualPlatform();
 };
-//# sourceMappingURL=app.js.map

@@ -1,4 +1,5 @@
-import {GameStates} from "./GamePlayState";
+//import {GamePlayState} from "./GamePlayState";
+//import GamePlayState = require("./GamePlayState");
 module Game {
     export class CasualPlatform {
         game: Phaser.Game;
@@ -16,7 +17,7 @@ module Game {
         } 
 
         create() {
-            this.game.state.add("GamePlayState", GameStates.GamePlayState, true);
+            this.game.state.add("GamePlayState", GamePlayState, true);
         }
     }
 }
