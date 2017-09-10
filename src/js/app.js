@@ -7,8 +7,6 @@ var Game;
             });
         }
         preload() {
-            this.game.load.image('ground', 'assets/platform_48x48.bmp');
-            this.game.load.image('sky', 'assets/sky_800x600.png');
         }
         create() {
             this.game.state.add("GamePlayState", GamePlayState, true);
