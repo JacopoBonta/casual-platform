@@ -3,15 +3,21 @@ define(["require", "exports", "states/game/GamePlayState"], function (require, e
     Object.defineProperty(exports, "__esModule", { value: true });
     class CasualPlatform {
         constructor() {
-            this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
-                create: this.create, preload: this.preload
-            });
+            this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'game');
+            this.game.state.add('GamePlayState', GamePlayState_1.GamePlayState);
         }
-        preload() {
+        addState(stateKey, state) {
+            this.game.state.add(stateKey, state);
+            return this;
         }
-        create() {
-            this.game.state.add("GamePlayState", GamePlayState_1.GamePlayState, true);
+        play(stateKey) {
+            if (!stateKey) {
+                this.game.state.start('GamePlayState');
+            }
+            else {
+                this.game.state.start(stateKey);
+            }
         }
     }
-    var game = new CasualPlatform();
+    var game = new CasualPlatform().play();
 });

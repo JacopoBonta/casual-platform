@@ -11,8 +11,8 @@ export abstract class State extends Phaser.State {
     }
     
     preload(): void {};
-    create(): void {};
     render(): void {};
-
+    
+    abstract create(): void;
     abstract update(): void;
 }

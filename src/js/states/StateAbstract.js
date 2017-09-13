@@ -7,8 +7,6 @@ define(["require", "exports"], function (require, exports) {
         }
         preload() { }
         ;
-        create() { }
-        ;
         render() { }
         ;
     }
