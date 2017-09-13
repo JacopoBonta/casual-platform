@@ -1,9 +1,8 @@
-//import {GamePlayState} from "./GamePlayState";
-//import GamePlayState = require("./GamePlayState");
+//import {GamePlayState} from ".states/game/GamePlayState";
+//import GamePlayState = require(".states/game/GamePlayState");
 module Game {
     export class CasualPlatform {
         game: Phaser.Game;
-
 
         constructor() {
             this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {

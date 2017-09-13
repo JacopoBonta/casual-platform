@@ -10,6 +10,7 @@
         "lib/pixi.d.ts",
         "lib/p2.d.ts",
         "app.ts",
-        "GamePlayState.ts"
+        "states/StateAbstract.ts",
+        "states/game/GamePlayState.ts"
     ]
 }
