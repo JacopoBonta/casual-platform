@@ -1,12 +1,7 @@
-class GamePlayState extends Phaser.State {
-    game: Phaser.Game;
+class GamePlayState extends State {
     player: Phaser.Sprite;
     groundGroup: Phaser.Group;
     cursors: Phaser.CursorKeys;
-
-    constructor() {
-        super();
-    }
 
     preload() {
         this.game.load.image('ground', 'assets/platform_48x48.bmp');
