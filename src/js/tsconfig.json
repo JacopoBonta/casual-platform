@@ -9,7 +9,7 @@
         "lib/phaser.d.ts",
         "lib/pixi.d.ts",
         "lib/p2.d.ts",
-        "app.ts",
+        "main.ts",
         "states/StateAbstract.ts",
         "states/game/GamePlayState.ts"
     ]
