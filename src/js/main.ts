@@ -2,6 +2,7 @@
  * 
  */
 import {GamePlayState as defaultState} from "states/game/GamePlayState";
+import {GameoverState} from "states/game/GameoverState"
 
 class CasualPlatform {
     game: Phaser.Game;
@@ -9,6 +10,7 @@ class CasualPlatform {
     constructor() {
         this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'game');
         this.game.state.add('GamePlayState', defaultState);
+        this.game.state.add('GameoverState', GameoverState);
     }
 
     // todo why addState(stateKey: string, state :Phaser.State) doesn't work

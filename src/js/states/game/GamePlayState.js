@@ -4,12 +4,12 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
     class GamePlayState extends StateAbstract_1.State {
         preload() {
             this.game.load.image('ground', 'assets/platform_48x48.bmp');
-            this.game.load.image('sky', 'assets/sky_800x600.png');
+            this.game.load.image('background', 'assets/treesbackground.png');
             this.game.load.spritesheet('player', 'assets/stickman.png', 100, 120, 7);
         }
         create() {
             this.printGameInfo();
-            this.game.add.sprite(0, 0, 'sky');
+            this.game.add.sprite(0, 0, 'background');
             this.createGround(80, 80);
             this.createStickman();
             this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -35,6 +35,9 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
             }
             if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
                 player.body.velocity.y = -350;
+            }
+            if (player.y >= this.game.world.height) {
+                this.game.state.start("GameoverState");
             }
         }
         printGameInfo() {
@@ -73,7 +76,7 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
             this.player.anchor.setTo(.5, .5);
             this.player.body.bounce.y = 0.2;
             this.player.body.gravity.y = 700;
-            this.player.body.collideWorldBounds = true;
+            this.player.body.collideWorldBounds = false;
             this.player.animations.add('left', [0, 1, 2, 3, 4, 5, 6], 20, true);
             this.player.animations.add('right', [0, 1, 2, 3, 4, 5, 6], 20, true);
         }

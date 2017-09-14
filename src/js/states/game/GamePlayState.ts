@@ -10,13 +10,13 @@ export class GamePlayState extends State {
 
     preload() {
         this.game.load.image('ground', 'assets/platform_48x48.bmp');
-        this.game.load.image('sky', 'assets/sky_800x600.png');
+        this.game.load.image('background', 'assets/treesbackground.png');
         this.game.load.spritesheet('player', 'assets/stickman.png', 100, 120, 7);
     }
 
     create() {
         this.printGameInfo();
-        this.game.add.sprite(0, 0, 'sky');
+        this.game.add.sprite(0, 0, 'background');
         this.createGround(80, 80);
         this.createStickman();
 
@@ -55,6 +55,11 @@ export class GamePlayState extends State {
         //  Allow the player to jump if they are touching the ground.
         if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
             player.body.velocity.y = -350;
+        }
+
+        // check if the player fell down 
+        if(player.y >= this.game.world.height){
+            this.game.state.start("GameoverState");
         }
     }
 
@@ -120,7 +125,7 @@ export class GamePlayState extends State {
         //  Player physics properties. Give the little guy a slight bounce.
         this.player.body.bounce.y = 0.2;
         this.player.body.gravity.y = 700;
-        this.player.body.collideWorldBounds = true;
+        this.player.body.collideWorldBounds = false;
 
         //  Our two animations, walking left and right.
         this.player.animations.add('left', [0, 1, 2, 3, 4, 5, 6], 20, true);
