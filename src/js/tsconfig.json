@@ -11,6 +11,7 @@
         "lib/p2.d.ts",
         "main.ts",
         "states/StateAbstract.ts",
-        "states/game/GamePlayState.ts"
+        "states/game/GamePlayState.ts",
+        "utils/Debug.ts"
     ]
 }

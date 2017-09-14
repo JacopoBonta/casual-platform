@@ -2,11 +2,14 @@
  * GamePlayState
  */
 import {State} from 'states/StateAbstract';
+import {Debug} from 'utils/Debug';
 
 export class GamePlayState extends State {
     player: Phaser.Sprite;
     groundGroup: Phaser.Group;
     cursors: Phaser.CursorKeys;
+
+    debug: Debug;
 
     preload() {
         this.game.load.image('ground', 'assets/platform_48x48.bmp');
@@ -22,6 +25,9 @@ export class GamePlayState extends State {
 
         // create the cursor key object
         this.cursors = this.game.input.keyboard.createCursorKeys();
+
+        this.debug = new Debug(this.game.debug, true);
+        this.debug.setY(10);
     }
 
     update() {
@@ -56,6 +62,14 @@ export class GamePlayState extends State {
         if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
             player.body.velocity.y = -350;
         }
+    }
+
+    render() {
+        this.debug.setX(0).setY(10)
+                    .spriteInfo(this.player)
+                    .setY(150)
+                    .cameraInfo(this.game.camera);
+        
     }
 
     printGameInfo(): void {

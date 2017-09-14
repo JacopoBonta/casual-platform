@@ -1,4 +1,4 @@
-define(["require", "exports", "states/StateAbstract"], function (require, exports, StateAbstract_1) {
+define(["require", "exports", "states/StateAbstract", "utils/Debug"], function (require, exports, StateAbstract_1, Debug_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class GamePlayState extends StateAbstract_1.State {
@@ -13,6 +13,8 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
             this.createGround(80, 80);
             this.createStickman();
             this.cursors = this.game.input.keyboard.createCursorKeys();
+            this.debug = new Debug_1.Debug(this.game.debug, true);
+            this.debug.setY(10);
         }
         update() {
             let hitPlatform = this.game.physics.arcade.collide(this.player, this.groundGroup);
@@ -36,6 +38,12 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
             if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
                 player.body.velocity.y = -350;
             }
+        }
+        render() {
+            this.debug.setX(0).setY(10)
+                .spriteInfo(this.player)
+                .setY(150)
+                .cameraInfo(this.game.camera);
         }
         printGameInfo() {
             console.log(`World height: ${this.game.world.height}\nWorld width: ${this.game.world.width}`);
