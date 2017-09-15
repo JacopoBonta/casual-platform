@@ -4,8 +4,12 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
     class GameStartState extends StateAbstract_1.default {
         preload() {
             this.game.load.image('background', 'assets/treesbackground.png');
+            this.game.load.image('platform', 'assets/platform_1024x1024.png');
         }
         create() {
+            this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+            this.fullscreenBtn = this.input.keyboard.addKey(Phaser.KeyCode.F1);
+            this.fullscreenBtn.onDown.add(goFullscreen, this);
             this.game.add.sprite(0, 0, 'background');
             this.game.add.text(this.game.width / 2.5, 20, 'Casual Platform', {
                 font: 'Indie Flower',
@@ -30,8 +34,18 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
                 document.body.style.cursor = 'default';
                 item.clearColors();
             }, this);
+            let platform = this.game.add.sprite(this.world.centerX, this.world.centerY, 'platform');
+            platform.scale.setTo(0.1);
         }
         update() { }
     }
     exports.default = GameStartState;
+    function goFullscreen() {
+        if (this.game.scale.isFullScreen) {
+            this.game.scale.stopFullScreen();
+        }
+        else {
+            this.game.scale.startFullScreen(false);
+        }
+    }
 });
