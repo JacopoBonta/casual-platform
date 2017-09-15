@@ -12,20 +12,22 @@ export default class GameStartState extends State {
 
         this.game.add.text(this.game.width / 2.5, 20, 'Casual Platform');
         
-        let startText = this.game.add.text((this.game.width / 2) - 10, this.game.height / 2.5, 'Start');
+        let startText = this.game.add.text(this.game.world.centerX - 10, this.game.world.centerY - 0.5, 'Start');
         startText.inputEnabled = true;
+
         startText.events.onInputOver.add((item :Phaser.Text) => {
             document.body.style.cursor = 'pointer';
             item.addColor('#f00', 0);
         }, this);
         startText.events.onInputDown.add(() => {
             document.body.style.cursor = 'default';
+            this.game.state.clearCurrentState();
             this.game.state.start('GamePlayState');
         });
         startText.events.onInputOut.add((item :Phaser.Text) => {
             document.body.style.cursor = 'default';
             item.clearColors();
-        }, this)
+        }, this);
     }
     update() {}
 }

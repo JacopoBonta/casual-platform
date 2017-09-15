@@ -37,6 +37,7 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
                 player.body.velocity.y = -350;
             }
             if (player.y >= this.game.world.height) {
+                this.game.state.clearCurrentState();
                 this.game.state.start("GameoverState");
             }
         }
