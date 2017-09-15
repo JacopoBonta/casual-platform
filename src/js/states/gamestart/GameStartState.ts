@@ -10,9 +10,16 @@ export default class GameStartState extends State {
     create() {
         this.game.add.sprite(0, 0, 'background');
 
-        this.game.add.text(this.game.width / 2.5, 20, 'Casual Platform');
+        this.game.add.text(this.game.width / 2.5, 20, 'Casual Platform', {
+            font: 'Indie Flower',
+            fontSize: 35,
+            fontWeight: 'bold'
+        });
         
-        let startText = this.game.add.text(this.game.world.centerX - 10, this.game.world.centerY - 0.5, 'Start');
+        let startText = this.game.add.text(30, 150, 'Start', {
+            font: 'Indie Flower',
+            fontSize: 35
+        });
         startText.inputEnabled = true;
 
         startText.events.onInputOver.add((item :Phaser.Text) => {

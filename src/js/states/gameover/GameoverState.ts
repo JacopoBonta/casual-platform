@@ -11,7 +11,10 @@ export default class GameoverState extends State {
     create(): void{
         this.game.add.sprite(0, 0, 'gameover');
 
-        let restartText = this.game.add.text(this.game.world.centerX, this.game.world.centerY, 'Restart');
+        let restartText = this.game.add.text(this.game.world.centerX - 25, this.game.world.centerY, 'Restart', {
+            font: 'Indie Flower',
+            fontSize: 35
+        });
         restartText.inputEnabled = true;
 
         restartText.events.onInputOver.add((item :Phaser.Text) => {
