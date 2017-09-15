@@ -10,5 +10,5 @@ define(["require", "exports"], function (require, exports) {
         render() { }
         ;
     }
-    exports.State = State;
+    exports.default = State;
 });

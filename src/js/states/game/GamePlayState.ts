@@ -1,9 +1,9 @@
 /**
  * GamePlayState
  */
-import {State} from 'states/StateAbstract';
+import State from 'states/StateAbstract';
 
-export class GamePlayState extends State {
+export default class GamePlayState extends State {
     player: Phaser.Sprite;
     groundGroup: Phaser.Group;
     cursors: Phaser.CursorKeys;

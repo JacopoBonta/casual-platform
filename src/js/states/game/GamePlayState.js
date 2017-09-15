@@ -1,7 +1,7 @@
 define(["require", "exports", "states/StateAbstract"], function (require, exports, StateAbstract_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class GamePlayState extends StateAbstract_1.State {
+    class GamePlayState extends StateAbstract_1.default {
         preload() {
             this.game.load.image('ground', 'assets/platform_48x48.bmp');
             this.game.load.image('background', 'assets/treesbackground.png');
@@ -81,5 +81,5 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
             this.player.animations.add('right', [0, 1, 2, 3, 4, 5, 6], 20, true);
         }
     }
-    exports.GamePlayState = GamePlayState;
+    exports.default = GamePlayState;
 });

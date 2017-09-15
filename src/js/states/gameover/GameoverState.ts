@@ -2,9 +2,9 @@
  * GameoverState
  * This state is executed when the player has lost all his lives
  */
-import {State} from 'states/StateAbstract';
+import State from 'states/StateAbstract';
 
-export class GameoverState extends State {
+export default class GameoverState extends State {
     preload(): void{
         this.game.load.image('gameover', 'assets/gameover.png');
     }

@@ -1,15 +1,17 @@
 /**
  * 
  */
-import {GamePlayState as defaultState} from "states/game/GamePlayState";
-import {GameoverState} from "states/game/GameoverState"
+import GameStartState from "states/gamestart/GameStartState";
+import GamePlayState from "states/game/GamePlayState";
+import GameoverState from "states/gameover/GameoverState"
 
 class CasualPlatform {
     game: Phaser.Game;
 
     constructor() {
         this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'game');
-        this.game.state.add('GamePlayState', defaultState);
+        this.game.state.add('GameStartState', GameStartState);
+        this.game.state.add('GamePlayState', GamePlayState);
         this.game.state.add('GameoverState', GameoverState);
     }
 
@@ -28,4 +30,4 @@ class CasualPlatform {
     }
 }
 
-var game = new CasualPlatform().play();
+var game = new CasualPlatform().play('GameStartState');

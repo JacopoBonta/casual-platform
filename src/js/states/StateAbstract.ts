@@ -3,7 +3,7 @@
  * It is considered valid if it has at least one of the core functions (preload, create, update, render).
  * Extend this class to create a new state.
  */
-export abstract class State extends Phaser.State {
+export default abstract class State extends Phaser.State {
     game: Phaser.Game;
 
     constructor() {
