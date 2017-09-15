@@ -59,6 +59,7 @@ export default class GamePlayState extends State {
 
         // check if the player fell down 
         if(player.y >= this.game.world.height){
+            this.game.state.clearCurrentState();
             this.game.state.start("GameoverState");
         }
     }
