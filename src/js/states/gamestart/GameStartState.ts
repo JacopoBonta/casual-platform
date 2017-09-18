@@ -8,7 +8,6 @@ export default class GameStartState extends State {
 
     preload() {
         this.game.load.image('background', 'assets/treesbackground.png');
-        this.game.load.image('platform', 'assets/platform_1024x1024.png');
     }
     create() {
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
@@ -41,11 +40,7 @@ export default class GameStartState extends State {
         startText.events.onInputOut.add((item :Phaser.Text) => {
             document.body.style.cursor = 'default';
             item.clearColors();
-        }, this);
-
-        let platform = this.game.add.sprite(this.world.centerX, this.world.centerY, 'platform');
-        platform.scale.setTo(0.1);
-        
+        }, this);        
     }
     update() {}
 }

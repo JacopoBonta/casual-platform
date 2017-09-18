@@ -4,52 +4,50 @@
 import State from 'states/StateAbstract';
 
 export default class GamePlayState extends State {
-    player: Phaser.Sprite;
+    hero: Phaser.Sprite;
     groundGroup: Phaser.Group;
     cursors: Phaser.CursorKeys;
+    scalePlatform :number = 0.02;
 
     preload() {
-        this.game.load.image('ground', 'assets/platform_48x48.bmp');
+        this.game.load.image('platform', 'assets/platform_1024x1024.png');
         this.game.load.image('background', 'assets/treesbackground.png');
-        this.game.load.spritesheet('player', 'assets/stickman.png', 100, 120, 7);
+        this.game.load.spritesheet('hero', 'assets/hero.png', 19, 34, 12);
     }
 
     create() {
         this.printGameInfo();
         this.game.add.sprite(0, 0, 'background');
-        this.createGround(80, 80);
-        this.createStickman();
+
+        this.generateGround();        
+        this.createHero(); // todo new Hero()
 
         // create the cursor key object
         this.cursors = this.game.input.keyboard.createCursorKeys();
     }
 
     update() {
-        //  Collide the player with the platforms
-        let hitPlatform = this.game.physics.arcade.collide(this.player, this.groundGroup);
-        let player = this.player;
+        let player = this.hero;
         let cursors = this.cursors;
+
+        //  Collide the player with the platforms
+        let hitPlatform = this.game.physics.arcade.collide(player, this.groundGroup);
 
         //  Reset the players velocity (movement)
         player.body.velocity.x = 0;
 
         if (cursors.left.isDown) {
             //  Move to the left
-            player.body.velocity.x = -200;
+            player.body.velocity.x = -100;
             player.scale.setTo(-1,1);
-            player.animations.play('left');
         }
         else if (cursors.right.isDown) {
             //  Move to the right
-            player.body.velocity.x = 200;
+            player.body.velocity.x = 100;
             player.scale.setTo(1,1);
-            player.animations.play('right');
         }
         else {
             //  Stand still
-            player.animations.stop();
-
-            player.frame = 3;
         }
 
         //  Allow the player to jump if they are touching the ground.
@@ -58,10 +56,18 @@ export default class GamePlayState extends State {
         }
 
         // check if the player fell down 
-        if(player.y >= this.game.world.height){
+        /*if(player.y >= this.game.world.height){
             this.game.state.clearCurrentState();
             this.game.state.start("GameoverState");
-        }
+        }*/
+    }
+
+    render() {
+        let platform :Phaser.Sprite = (this.groundGroup.getAt(0) as Phaser.Sprite);
+        this.game.debug.spriteInfo(platform, 32, 32);
+        this.game.debug.spriteBounds(platform);
+        //this.game.debug.spriteBounds(this.hero);
+        this.game.debug.spriteCoords(this.hero, this.game.world.width - 380, 32);
     }
 
     printGameInfo(): void {
@@ -75,7 +81,7 @@ export default class GamePlayState extends State {
      * 
      * ps: a platform is made by blocks; a single block measure 48*48 px.
      */
-    createGround(offsetX = 192, inequality = 0) {
+    /*generateGround(offsetX = 192, inequality = 0) {
         // Create a group where to add platforms for the ground
         this.groundGroup = this.game.add.group();
         let ground = this.groundGroup;
@@ -110,26 +116,50 @@ export default class GamePlayState extends State {
         platform = ground.create(this.game.world.width - 144, this.game.world.height - 64, 'ground');
         platform.scale.setTo(3, 1);
         platform.body.immovable = true;
+    }*/
 
+    generateGround() {
+        let worldLength = this.game.world.width;
+        let blockSize = 20.48;
+        let blocksNumber = Math.ceil(worldLength / blockSize);
+        let platforms = [];
+        let ground = this.groundGroup = this.game.add.group();
+        ground.enableBody = true;
+
+        let x = 0;
+        let y = this.world.bottom - blockSize;
+
+        for (let i = 0; i < blocksNumber; i++) {
+            // if (i <= 3 || i >= blocksNumber - 5 || Math.floor(Math.random() * 10) % 2 === 0) {
+                // Create a platform to a given coordinates
+                let platform = this.game.add.sprite(x, y, 'platform');
+                // Scale the platform
+                platform.scale.setTo(this.scalePlatform);
+                platforms.push(platform);
+            // }
+
+            x += blockSize;
+        }
+        
+        platforms.forEach((platform :Phaser.Sprite) => {
+            ground.add(platform);
+        });
+
+        ground.forEach((child :Phaser.Sprite, isImmovable :boolean) => {
+            // An immovable body will not recive any impacts from the other bodies
+            child.body.immovable = isImmovable;
+        }, this, false, true);
     }
 
-    createStickman() {
-        // The player and its settings
-        this.player = this.game.add.sprite(32, this.game.world.height - 200, 'player');
+    createHero() {
+        let hero = this.hero = this.game.add.sprite(32, this.game.world.height - 200, 'hero');
 
-        //  We need to enable physics on the player
-        this.game.physics.arcade.enable(this.player);
+        hero.animations.add('idle');
+        hero.animations.play('idle', 50, true);
 
-        this.player.body.setSize(45, 73, 10, 30);
-        this.player.anchor.setTo(.5,.5);
-
-        //  Player physics properties. Give the little guy a slight bounce.
-        this.player.body.bounce.y = 0.2;
-        this.player.body.gravity.y = 700;
-        this.player.body.collideWorldBounds = false;
-
-        //  Our two animations, walking left and right.
-        this.player.animations.add('left', [0, 1, 2, 3, 4, 5, 6], 20, true);
-        this.player.animations.add('right', [0, 1, 2, 3, 4, 5, 6], 20, true);
+        this.game.physics.arcade.enable(hero);
+        hero.body.bounce.y = 0;
+        hero.body.gravity.y = 1400;
+        hero.body.collideWorldBounds = false;
     }
 }

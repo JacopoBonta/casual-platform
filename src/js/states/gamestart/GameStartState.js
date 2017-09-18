@@ -4,7 +4,6 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
     class GameStartState extends StateAbstract_1.default {
         preload() {
             this.game.load.image('background', 'assets/treesbackground.png');
-            this.game.load.image('platform', 'assets/platform_1024x1024.png');
         }
         create() {
             this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
@@ -34,8 +33,6 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
                 document.body.style.cursor = 'default';
                 item.clearColors();
             }, this);
-            let platform = this.game.add.sprite(this.world.centerX, this.world.centerY, 'platform');
-            platform.scale.setTo(0.1);
         }
         update() { }
     }

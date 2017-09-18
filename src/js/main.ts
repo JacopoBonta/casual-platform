@@ -30,4 +30,4 @@ class CasualPlatform {
     }
 }
 
-var game = new CasualPlatform().play('GameStartState');
+var game = new CasualPlatform().play('GamePlayState');

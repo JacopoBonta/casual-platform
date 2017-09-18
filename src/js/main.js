@@ -21,5 +21,5 @@ define(["require", "exports", "states/gamestart/GameStartState", "states/game/Ga
             }
         }
     }
-    var game = new CasualPlatform().play('GameStartState');
+    var game = new CasualPlatform().play('GamePlayState');
 });
