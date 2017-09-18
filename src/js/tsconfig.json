@@ -13,6 +13,7 @@
         "states/StateAbstract.ts",
         "states/gamestart/GameStartState.ts",
         "states/game/GamePlayState.ts",
-        "states/gameover/GameoverState.ts"
+        "states/gameover/GameoverState.ts",
+        "Hero.ts"
     ]
 }
