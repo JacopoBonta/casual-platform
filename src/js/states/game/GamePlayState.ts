@@ -2,9 +2,10 @@
  * GamePlayState
  */
 import State from 'states/StateAbstract';
+import Hero from 'Hero';
 
 export default class GamePlayState extends State {
-    hero: Phaser.Sprite;
+    hero: Hero;
     groundGroup: Phaser.Group;
     cursors: Phaser.CursorKeys;
     scalePlatform :number = 0.02;
@@ -12,15 +13,14 @@ export default class GamePlayState extends State {
     preload() {
         this.game.load.image('platform', 'assets/platform_1024x1024.png');
         this.game.load.image('background', 'assets/treesbackground.png');
-        this.game.load.spritesheet('hero', 'assets/hero.png', 19, 34, 12);
+        this.game.load.spritesheet('hero', 'assets/hero_spritesheet.png', 21, 40);
     }
 
     create() {
         this.printGameInfo();
         this.game.add.sprite(0, 0, 'background');
-
         this.generateGround();        
-        this.createHero(); // todo new Hero()
+        this.hero = new Hero(this.game);
 
         // create the cursor key object
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -30,45 +30,38 @@ export default class GamePlayState extends State {
         let player = this.hero;
         let cursors = this.cursors;
 
-        //  Collide the player with the platforms
-        let hitPlatform = this.game.physics.arcade.collide(player, this.groundGroup);
-
-        //  Reset the players velocity (movement)
-        player.body.velocity.x = 0;
+        let hitGround = player.collide(this.groundGroup);
 
         if (cursors.left.isDown) {
-            //  Move to the left
-            player.body.velocity.x = -100;
-            player.scale.setTo(-1,1);
-        }
-        else if (cursors.right.isDown) {
-            //  Move to the right
-            player.body.velocity.x = 100;
-            player.scale.setTo(1,1);
-        }
-        else {
-            //  Stand still
+            player.goLeft();
+        } else if (cursors.right.isDown) {
+            player.goRight();
+        } else {
+            player.stand();
         }
 
-        //  Allow the player to jump if they are touching the ground.
-        if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
-            player.body.velocity.y = -350;
+        if (cursors.up.isDown && hitGround) {
+            player.jump();
+        }
+
+        if (!hitGround) {
+            player.fall();
         }
 
         // check if the player fell down 
-        if(player.y >= this.game.world.height){
+        if(player.sprite.y >= this.game.world.height){
             this.game.state.clearCurrentState();
             this.game.state.start("GameoverState");
         }
     }
 
-    /* render() {
-        let platform :Phaser.Sprite = (this.groundGroup.getAt(0) as Phaser.Sprite);
+    render() {
+        /* let platform :Phaser.Sprite = (this.groundGroup.getAt(0) as Phaser.Sprite);
         this.game.debug.spriteInfo(platform, 32, 32);
         this.game.debug.spriteBounds(platform);
-        //this.game.debug.spriteBounds(this.hero);
-        this.game.debug.spriteCoords(this.hero, this.game.world.width - 380, 32);
-    } */
+        this.game.debug.spriteBounds(this.hero.sprite);
+        this.game.debug.spriteCoords(this.hero.sprite, this.game.world.width - 380, 32); */
+    }
 
     printGameInfo(): void {
         console.log(`World height: ${this.game.world.height}\nWorld width: ${this.game.world.width}`);
@@ -149,17 +142,5 @@ export default class GamePlayState extends State {
             // An immovable body will not recive any impacts from the other bodies
             child.body.immovable = isImmovable;
         }, this, false, true);
-    }
-
-    createHero() {
-        let hero = this.hero = this.game.add.sprite(32, this.game.world.height - 200, 'hero');
-
-        hero.animations.add('idle');
-        hero.animations.play('idle', 50, true);
-
-        this.game.physics.arcade.enable(hero);
-        hero.body.bounce.y = 0;
-        hero.body.gravity.y = 1400;
-        hero.body.collideWorldBounds = false;
     }
 }

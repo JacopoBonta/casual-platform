@@ -1,4 +1,4 @@
-define(["require", "exports", "states/StateAbstract"], function (require, exports, StateAbstract_1) {
+define(["require", "exports", "states/StateAbstract", "Hero"], function (require, exports, StateAbstract_1, Hero_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class GamePlayState extends StateAbstract_1.default {
@@ -9,37 +9,40 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
         preload() {
             this.game.load.image('platform', 'assets/platform_1024x1024.png');
             this.game.load.image('background', 'assets/treesbackground.png');
-            this.game.load.spritesheet('hero', 'assets/hero.png', 19, 34, 12);
+            this.game.load.spritesheet('hero', 'assets/hero_spritesheet.png', 21, 40);
         }
         create() {
             this.printGameInfo();
             this.game.add.sprite(0, 0, 'background');
             this.generateGround();
-            this.createHero();
+            this.hero = new Hero_1.default(this.game);
             this.cursors = this.game.input.keyboard.createCursorKeys();
         }
         update() {
             let player = this.hero;
             let cursors = this.cursors;
-            let hitPlatform = this.game.physics.arcade.collide(player, this.groundGroup);
-            player.body.velocity.x = 0;
+            let hitGround = player.collide(this.groundGroup);
             if (cursors.left.isDown) {
-                player.body.velocity.x = -100;
-                player.scale.setTo(-1, 1);
+                player.goLeft();
             }
             else if (cursors.right.isDown) {
-                player.body.velocity.x = 100;
-                player.scale.setTo(1, 1);
+                player.goRight();
             }
             else {
+                player.stand();
             }
-            if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
-                player.body.velocity.y = -350;
+            if (cursors.up.isDown && hitGround) {
+                player.jump();
             }
-            if (player.y >= this.game.world.height) {
+            if (!hitGround) {
+                player.fall();
+            }
+            if (player.sprite.y >= this.game.world.height) {
                 this.game.state.clearCurrentState();
                 this.game.state.start("GameoverState");
             }
+        }
+        render() {
         }
         printGameInfo() {
             console.log(`World height: ${this.game.world.height}\nWorld width: ${this.game.world.width}`);
@@ -65,15 +68,6 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
             ground.forEach((child, isImmovable) => {
                 child.body.immovable = isImmovable;
             }, this, false, true);
-        }
-        createHero() {
-            let hero = this.hero = this.game.add.sprite(32, this.game.world.height - 200, 'hero');
-            hero.animations.add('idle');
-            hero.animations.play('idle', 50, true);
-            this.game.physics.arcade.enable(hero);
-            hero.body.bounce.y = 0;
-            hero.body.gravity.y = 1400;
-            hero.body.collideWorldBounds = false;
         }
     }
     exports.default = GamePlayState;

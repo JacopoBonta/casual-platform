@@ -14,12 +14,12 @@ define(["require", "exports", "states/gamestart/GameStartState", "states/game/Ga
         }
         play(stateKey) {
             if (!stateKey) {
-                this.game.state.start('GamePlayState');
+                this.game.state.start('GameStartState');
             }
             else {
                 this.game.state.start(stateKey);
             }
         }
     }
-    var game = new CasualPlatform().play('GameStartState');
+    var game = new CasualPlatform().play();
 });

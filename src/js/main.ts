@@ -23,11 +23,11 @@ class CasualPlatform {
 
     play(stateKey?: string) {
         if (!stateKey) {
-            this.game.state.start('GamePlayState');
+            this.game.state.start('GameStartState');
         } else {
             this.game.state.start(stateKey);
         }
     }
 }
 
-var game = new CasualPlatform().play('GameStartState');
+var game = new CasualPlatform().play();
