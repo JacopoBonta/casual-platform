@@ -56,19 +56,19 @@ export default class GamePlayState extends State {
         }
 
         // check if the player fell down 
-        /*if(player.y >= this.game.world.height){
+        if(player.y >= this.game.world.height){
             this.game.state.clearCurrentState();
             this.game.state.start("GameoverState");
-        }*/
+        }
     }
 
-    render() {
+    /* render() {
         let platform :Phaser.Sprite = (this.groundGroup.getAt(0) as Phaser.Sprite);
         this.game.debug.spriteInfo(platform, 32, 32);
         this.game.debug.spriteBounds(platform);
         //this.game.debug.spriteBounds(this.hero);
         this.game.debug.spriteCoords(this.hero, this.game.world.width - 380, 32);
-    }
+    } */
 
     printGameInfo(): void {
         console.log(`World height: ${this.game.world.height}\nWorld width: ${this.game.world.width}`);

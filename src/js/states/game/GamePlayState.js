@@ -36,12 +36,10 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
             if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
                 player.body.velocity.y = -350;
             }
-        }
-        render() {
-            let platform = this.groundGroup.getAt(0);
-            this.game.debug.spriteInfo(platform, 32, 32);
-            this.game.debug.spriteBounds(platform);
-            this.game.debug.spriteCoords(this.hero, this.game.world.width - 380, 32);
+            if (player.y >= this.game.world.height) {
+                this.game.state.clearCurrentState();
+                this.game.state.start("GameoverState");
+            }
         }
         printGameInfo() {
             console.log(`World height: ${this.game.world.height}\nWorld width: ${this.game.world.width}`);
