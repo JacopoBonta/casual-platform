@@ -23,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
             this.game.physics.arcade.enable(this.sprite);
             this.sprite.body.gravity.y = this.gravity;
             this.sprite.body.collideWorldBounds = false;
+            this.sprite.body.setSize(10 / this.sprite.scale.x, 30 / this.sprite.scale.y, 5, 5);
         }
         isTouchingDown() {
             return this.sprite.body.touching.down;

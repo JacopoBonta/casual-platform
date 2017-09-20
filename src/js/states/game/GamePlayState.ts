@@ -3,12 +3,12 @@
  */
 import State from 'states/StateAbstract';
 import Hero from 'Hero';
+import Platformer from 'Platformer';
 
 export default class GamePlayState extends State {
+    ground :Platformer;
     hero: Hero;
-    groundGroup: Phaser.Group;
-    cursors: Phaser.CursorKeys;
-    scalePlatform :number = 0.02;
+    cursors :Phaser.CursorKeys;
 
     preload() {
         this.game.load.image('platform', 'assets/platform_1024x1024.png');
@@ -19,7 +19,14 @@ export default class GamePlayState extends State {
     create() {
         this.printGameInfo();
         this.game.add.sprite(0, 0, 'background');
-        this.generateGround();        
+
+        this.ground = new Platformer(this.game, 'platform');
+        this.ground
+            .generatePlatform(0, this.world.bottom - 21, this.world.width / 21, 3)
+            .generatePlatformFromArray(380, this.world.bottom - 21, [1,2,2,3,4,5,6,7,8])
+            .generatePlatformFromArray(600, 400, [0,-1,-1,0,0,-1,-1])
+            .setImmovable(true);
+        
         this.hero = new Hero(this.game);
 
         // create the cursor key object
@@ -30,7 +37,7 @@ export default class GamePlayState extends State {
         let player = this.hero;
         let cursors = this.cursors;
 
-        let hitGround = player.collide(this.groundGroup);
+        let hitGround = player.collide(this.ground.group);
 
         if (cursors.left.isDown) {
             player.goLeft();
@@ -61,86 +68,10 @@ export default class GamePlayState extends State {
         this.game.debug.spriteBounds(platform);
         this.game.debug.spriteBounds(this.hero.sprite);
         this.game.debug.spriteCoords(this.hero.sprite, this.game.world.width - 380, 32); */
+        // this.game.debug.body(this.hero.sprite, 'rgba(244, 235, 66, 0.5)');
     }
 
     printGameInfo(): void {
         console.log(`World height: ${this.game.world.height}\nWorld width: ${this.game.world.width}`);
-    }
-
-    /**
-     * Populate the ground with platforms.
-     * Start platform and end platform have a fixed width of 3 blocks.
-     * Middle platforms have a random width between 1 and 4 blocks.
-     * 
-     * ps: a platform is made by blocks; a single block measure 48*48 px.
-     */
-    /*generateGround(offsetX = 192, inequality = 0) {
-        // Create a group where to add platforms for the ground
-        this.groundGroup = this.game.add.group();
-        let ground = this.groundGroup;
-        ground.enableBody = true;
-
-        // Place starting platform
-        let platform = ground.create(0, this.game.world.height - 64, 'ground');
-        platform.scale.setTo(3, 1);
-        platform.body.immovable = true;
-        let nextPlatformXPos = 144 + offsetX;
-
-        // Place the middle platforms
-        while (nextPlatformXPos < this.game.world.width) {
-            let offsetY = this.game.world.height - 64;
-            if (inequality > 0) {
-                offsetY -= Math.floor(Math.random() * inequality);
-            }
-            // How much scale a single block
-            let platformScaleX = Math.floor(Math.random() * (4 - 1) + 1);
-            let platformLength = platformScaleX * 48;
-
-            if (nextPlatformXPos + platformLength < this.game.world.width - 144) {
-                platform = ground.create(nextPlatformXPos, offsetY, 'ground');
-                platform.scale.setTo(platformScaleX, 1);
-                platform.body.immovable = true;
-            }
-
-            nextPlatformXPos += platformLength + offsetX;
-        }
-
-        // Place ending platform
-        platform = ground.create(this.game.world.width - 144, this.game.world.height - 64, 'ground');
-        platform.scale.setTo(3, 1);
-        platform.body.immovable = true;
-    }*/
-
-    generateGround() {
-        let worldLength = this.game.world.width;
-        let blockSize = 20.48;
-        let blocksNumber = Math.ceil(worldLength / blockSize);
-        let platforms = [];
-        let ground = this.groundGroup = this.game.add.group();
-        ground.enableBody = true;
-
-        let x = 0;
-        let y = this.world.bottom - blockSize;
-
-        for (let i = 0; i < blocksNumber; i++) {
-            // if (i <= 3 || i >= blocksNumber - 5 || Math.floor(Math.random() * 10) % 2 === 0) {
-                // Create a platform to a given coordinates
-                let platform = this.game.add.sprite(x, y, 'platform');
-                // Scale the platform
-                platform.scale.setTo(this.scalePlatform);
-                platforms.push(platform);
-            // }
-
-            x += blockSize;
-        }
-        
-        platforms.forEach((platform :Phaser.Sprite) => {
-            ground.add(platform);
-        });
-
-        ground.forEach((child :Phaser.Sprite, isImmovable :boolean) => {
-            // An immovable body will not recive any impacts from the other bodies
-            child.body.immovable = isImmovable;
-        }, this, false, true);
     }
 }

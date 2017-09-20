@@ -32,6 +32,7 @@ export default class Hero {
         this.game.physics.arcade.enable(this.sprite);
         this.sprite.body.gravity.y = this.gravity;
         this.sprite.body.collideWorldBounds = false;
+        this.sprite.body.setSize(10 / this.sprite.scale.x, 30 / this.sprite.scale.y, 5, 5);
     }
 
     private isTouchingDown() :boolean {
