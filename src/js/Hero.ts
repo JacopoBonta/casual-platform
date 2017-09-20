@@ -121,7 +121,7 @@ export default class Hero {
     public stand() :Hero {
         let hero = this.getSprite();
         hero.animations.play('idle');        
-        hero.body.setZeroVelocity();
+        hero.body.velocity.x = 0;
         return this;
     }
 

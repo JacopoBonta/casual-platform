@@ -93,7 +93,7 @@ define(["require", "exports"], function (require, exports) {
         stand() {
             let hero = this.getSprite();
             hero.animations.play('idle');
-            hero.body.setZeroVelocity();
+            hero.body.velocity.x = 0;
             return this;
         }
         jump() {

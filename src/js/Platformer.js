@@ -3,11 +3,11 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     class Platformer {
         constructor(game, spriteKey) {
-            this.blockSize = 20.48;
-            this.blockScale = 0.02;
             this.game = game;
             this.sprite = spriteKey;
             this.group = this.game.add.group();
+            this.blockSize = 20.48;
+            this.blockScale = 0.02;
         }
         getGroup() {
             return this.group;

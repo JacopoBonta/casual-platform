@@ -3,13 +3,16 @@ export default class Platformer {
     group :Phaser.Group;
 
     private sprite :string;
-    private blockSize :number = 20.48;
-    private blockScale :number = 0.02;
+    private blockSize :number;
+    private blockScale :number;
 
     constructor(game :Phaser.Game, spriteKey :string) {
         this.game = game;
         this.sprite = spriteKey;
         this.group = this.game.add.group();
+
+        this.blockSize = 20.48;
+        this.blockScale = 0.02;
     }
     /**
      * Returns the Group for the platform(s).

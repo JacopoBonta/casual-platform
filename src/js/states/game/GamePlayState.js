@@ -12,12 +12,18 @@ define(["require", "exports", "states/StateAbstract", "Hero", "Platformer"], fun
             this.game.add.sprite(0, 0, 'background');
             this.ground = new Platformer_1.default(this.game, 'platform');
             this.ground
-                .generatePlatform(0, this.world.bottom - 21, this.world.width / 21, 3)
+                .generatePlatform(0, this.world.bottom - 21, this.world.width / 21, 7)
                 .generatePlatformFromArray(380, this.world.bottom - 21, [1, 2, 2, 3, 4, 5, 6, 7, 8])
                 .generatePlatformFromArray(600, 400, [0, -1, -1, 0, 0, -1, -1])
                 .setImmovable(true);
             this.hero = new Hero_1.default(this.game);
             this.cursors = this.game.input.keyboard.createCursorKeys();
+            this.lifeText = this.game.add.text(32, 32, `Life: ${this.hero.getLife()}`, {
+                font: 'Indie Flower',
+                fontSize: 35,
+                fontWeight: 'bold',
+                fill: '#ff0044'
+            });
         }
         update() {
             let player = this.hero;
@@ -40,6 +46,7 @@ define(["require", "exports", "states/StateAbstract", "Hero", "Platformer"], fun
             }
             if (player.getSprite().y >= this.game.world.height) {
                 player.hit();
+                this.updateLifeText();
                 if (player.getLife() <= 0) {
                     this.game.state.clearCurrentState();
                     this.game.state.start("GameoverState");
@@ -53,6 +60,9 @@ define(["require", "exports", "states/StateAbstract", "Hero", "Platformer"], fun
         }
         printGameInfo() {
             console.log(`World height: ${this.game.world.height}\nWorld width: ${this.game.world.width}`);
+        }
+        updateLifeText() {
+            this.lifeText.setText(`Life: ${this.hero.getLife()}`);
         }
     }
     exports.default = GamePlayState;

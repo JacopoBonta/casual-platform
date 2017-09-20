@@ -9,6 +9,7 @@ export default class GamePlayState extends State {
     ground :Platformer;
     hero: Hero;
     cursors :Phaser.CursorKeys;
+    lifeText :Phaser.Text;
 
     preload() {
         this.game.load.image('platform', 'assets/platform_1024x1024.png');
@@ -22,7 +23,7 @@ export default class GamePlayState extends State {
 
         this.ground = new Platformer(this.game, 'platform');
         this.ground
-            .generatePlatform(0, this.world.bottom - 21, this.world.width / 21, 3)
+            .generatePlatform(0, this.world.bottom - 21, this.world.width / 21, 7)
             .generatePlatformFromArray(380, this.world.bottom - 21, [1,2,2,3,4,5,6,7,8])
             .generatePlatformFromArray(600, 400, [0,-1,-1,0,0,-1,-1])
             .setImmovable(true);
@@ -31,6 +32,13 @@ export default class GamePlayState extends State {
 
         // create the cursor key object
         this.cursors = this.game.input.keyboard.createCursorKeys();
+
+        this.lifeText = this.game.add.text(32, 32, `Life: ${this.hero.getLife()}`, {
+            font: 'Indie Flower',
+            fontSize: 35,
+            fontWeight: 'bold',
+            fill: '#ff0044'
+        });
     }
 
     update() {
@@ -58,6 +66,7 @@ export default class GamePlayState extends State {
         // check if the player fell down 
         if(player.getSprite().y >= this.game.world.height){
             player.hit();
+            this.updateLifeText();
             if (player.getLife() <= 0) {
                 this.game.state.clearCurrentState();
                 this.game.state.start("GameoverState");
@@ -78,5 +87,9 @@ export default class GamePlayState extends State {
 
     printGameInfo(): void {
         console.log(`World height: ${this.game.world.height}\nWorld width: ${this.game.world.width}`);
+    }
+
+    updateLifeText() {
+        this.lifeText.setText(`Life: ${this.hero.getLife()}`);
     }
 }
