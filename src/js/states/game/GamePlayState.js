@@ -38,9 +38,15 @@ define(["require", "exports", "states/StateAbstract", "Hero", "Platformer"], fun
             if (!hitGround) {
                 player.fall();
             }
-            if (player.sprite.y >= this.game.world.height) {
-                this.game.state.clearCurrentState();
-                this.game.state.start("GameoverState");
+            if (player.getSprite().y >= this.game.world.height) {
+                player.hit();
+                if (player.getLife() <= 0) {
+                    this.game.state.clearCurrentState();
+                    this.game.state.start("GameoverState");
+                }
+                else {
+                    player.resetPosition();
+                }
             }
         }
         render() {
