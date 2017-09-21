@@ -2,7 +2,7 @@
  * GamePlayState
  */
 import State from 'states/StateAbstract';
-import Hero from 'Hero';
+import Hero from 'characters/Hero';
 import Platformer from 'Platformer';
 
 export default class GamePlayState extends State {
@@ -64,14 +64,14 @@ export default class GamePlayState extends State {
         }
 
         // check if the player fell down 
-        if(player.getSprite().y >= this.game.world.height){
-            player.hit();
+        if(player.getPos().y >= this.game.world.height){
+            player.damage();
             this.updateLifeText();
             if (player.getLife() <= 0) {
                 this.game.state.clearCurrentState();
                 this.game.state.start("GameoverState");
             } else {
-                player.resetPosition();
+                player.setPos();
             }
         }
     }

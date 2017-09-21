@@ -1,4 +1,4 @@
-define(["require", "exports", "states/StateAbstract", "Hero", "Platformer"], function (require, exports, StateAbstract_1, Hero_1, Platformer_1) {
+define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platformer"], function (require, exports, StateAbstract_1, Hero_1, Platformer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class GamePlayState extends StateAbstract_1.default {
@@ -44,15 +44,15 @@ define(["require", "exports", "states/StateAbstract", "Hero", "Platformer"], fun
             if (!hitGround) {
                 player.fall();
             }
-            if (player.getSprite().y >= this.game.world.height) {
-                player.hit();
+            if (player.getPos().y >= this.game.world.height) {
+                player.damage();
                 this.updateLifeText();
                 if (player.getLife() <= 0) {
                     this.game.state.clearCurrentState();
                     this.game.state.start("GameoverState");
                 }
                 else {
-                    player.resetPosition();
+                    player.setPos();
                 }
             }
         }

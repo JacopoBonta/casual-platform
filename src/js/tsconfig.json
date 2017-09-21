@@ -14,7 +14,8 @@
         "states/gamestart/GameStartState.ts",
         "states/game/GamePlayState.ts",
         "states/gameover/GameoverState.ts",
-        "Hero.ts",
-        "Platformer.ts"
+        "characters/Hero.ts",
+        "Platformer.ts",
+        "characters/CharacterInterface.ts"
     ]
 }
