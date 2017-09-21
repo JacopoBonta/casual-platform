@@ -13,7 +13,6 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
             this.ground = new Platformer_1.default(this.game, 'platform');
             this.ground
                 .generatePlatform(0, this.world.bottom - 21, this.world.width / 21, 7)
-                .generatePlatformFromArray(380, this.world.bottom - 21, [1, 2, 2, 3, 4, 5, 6, 7, 8])
                 .generatePlatformFromArray(600, 400, [0, -1, -1, 0, 0, -1, -1])
                 .setImmovable(true);
             this.hero = new Hero_1.default(this.game);
@@ -52,6 +51,7 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
                     this.game.state.start("GameoverState");
                 }
                 else {
+                    this.game.camera.flash(0x000000, 200);
                     player.setPos();
                 }
             }
