@@ -77,12 +77,7 @@ export default class GamePlayState extends State {
     }
 
     render() {
-        /* let platform :Phaser.Sprite = (this.groundGroup.getAt(0) as Phaser.Sprite);
-        this.game.debug.spriteInfo(platform, 32, 32);
-        this.game.debug.spriteBounds(platform);
-        this.game.debug.spriteBounds(this.hero.sprite);
-        this.game.debug.spriteCoords(this.hero.sprite, this.game.world.width - 380, 32); */
-        // this.game.debug.body(this.hero.sprite, 'rgba(244, 235, 66, 0.5)');
+        
     }
 
     printGameInfo(): void {
