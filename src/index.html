@@ -26,12 +26,23 @@
     #game > canvas {
       margin: auto;
       margin-top: 30px;
+      box-shadow: 0px 0px 50px #ccc;
+      border-radius: 5px;
+    }
+
+    #controlsmap {
+      font-family: monospace;
+      font-weight: bold;
+      padding-left: 80px;
     }
   </style>
 </head>
   <body>
     <!--<h1>Casual Platform</h1>-->
     <div id="game"></div>
+    <div id="controlsmap">
+      <p>left arrow: go left / up arrow: jump / right arrow: go right</p>
+    </div>
 
     <!-- Include Phaser-CE v2.8.5 library - the game engine -->
     <script src="js/lib/phaser.min.js"></script>
