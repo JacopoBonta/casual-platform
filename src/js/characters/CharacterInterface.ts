@@ -20,6 +20,7 @@ export default interface Character {
 
     isTouchingDown() :boolean;
     collide(o :Phaser.Sprite | Phaser.Group | Phaser.Particles.Arcade.Emitter | Phaser.TilemapLayer | Array<Phaser.Sprite | Phaser.Group | Phaser.Particles.Arcade.Emitter | Phaser.TilemapLayer>) :boolean;
+    collidePoint(p :Phaser.Point) :boolean;
 
     stand() :void;
     goLeft(x ?:number) :void;
