@@ -10,12 +10,12 @@ export default class Hero implements Character {
 
     private fps :number = 15;
 
-    constructor(game :Phaser.Game, x ?:number, y ?:number) {
+    constructor(game :Phaser.Game, initialPosition :Phaser.Point = {x: 0, y: 0} as Phaser.Point, life :number = 10, velocity :number = 100, gravity :number = 1400) {
         this.game = game;
-        this.initialPos = new Phaser.Point(x || 32, y || 32);
-        this.life = 10;
-        this.velocity = 100;
-        this.gravity = 1400;
+        this.initialPos = initialPosition;
+        this.life = life;
+        this.velocity = velocity;
+        this.gravity = gravity;
         this.sprite = this.game.add.sprite(this.initialPos.x, this.initialPos.y, 'hero', 0);
         this.setupSprite();
         this.body = this.sprite.body;
@@ -32,7 +32,7 @@ export default class Hero implements Character {
         this.sprite.animations.add('jump', [12]);
         this.sprite.animations.add('mid air', [48, 49], this.fps, true);
         this.sprite.animations.add('landing', [24]);
-        // Enable physics con the sprite
+        // Enable physics on the sprite
         this.game.physics.arcade.enable(this.sprite);
     }
     /**
@@ -92,6 +92,10 @@ export default class Hero implements Character {
 
     public collide(obj :Phaser.Sprite | Phaser.Group | Phaser.Particles.Arcade.Emitter | Phaser.TilemapLayer | Array<Phaser.Sprite | Phaser.Group | Phaser.Particles.Arcade.Emitter | Phaser.TilemapLayer>) :boolean {
         return this.game.physics.arcade.collide(this.sprite, obj);
+    }
+
+    public collidePoint(point :Phaser.Point) :boolean {
+        return this.sprite.getBounds().contains(point.x, point.y);
     }
 
     public stand() :void {

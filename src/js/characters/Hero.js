@@ -2,13 +2,13 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Hero {
-        constructor(game, x, y) {
+        constructor(game, initialPosition = { x: 0, y: 0 }, life = 10, velocity = 100, gravity = 1400) {
             this.fps = 15;
             this.game = game;
-            this.initialPos = new Phaser.Point(x || 32, y || 32);
-            this.life = 10;
-            this.velocity = 100;
-            this.gravity = 1400;
+            this.initialPos = initialPosition;
+            this.life = life;
+            this.velocity = velocity;
+            this.gravity = gravity;
             this.sprite = this.game.add.sprite(this.initialPos.x, this.initialPos.y, 'hero', 0);
             this.setupSprite();
             this.body = this.sprite.body;
@@ -68,6 +68,9 @@ define(["require", "exports"], function (require, exports) {
         }
         collide(obj) {
             return this.game.physics.arcade.collide(this.sprite, obj);
+        }
+        collidePoint(point) {
+            return this.sprite.getBounds().contains(point.x, point.y);
         }
         stand() {
             this.sprite.animations.play('idle');
