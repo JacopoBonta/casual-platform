@@ -53,11 +53,12 @@ define(["require", "exports"], function (require, exports) {
             }, this, false, enable);
             return this;
         }
-        generatePlatform(x, y, length, factor) {
-            let blocksNumber = length;
+        generatePlatform(start, end, factor = 10) {
+            let blocksNumber = Phaser.Point.distance(start, end);
             let platform = [];
+            let x = start.x;
+            let y = start.y;
             let consecutive = 0;
-            factor = factor || 10;
             for (let i = 0; i < blocksNumber; i++) {
                 if (i <= 1 || i >= blocksNumber - 1 || consecutive >= 2 || Math.floor(Math.random() * 10) <= factor) {
                     consecutive = 0;
