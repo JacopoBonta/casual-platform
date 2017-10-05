@@ -6,13 +6,13 @@ export default class Platformer {
     private blockSize :number;
     private blockScale :number;
 
-    constructor(game :Phaser.Game, spriteKey :string) {
+    constructor(game :Phaser.Game, spriteKey :string, spriteSize :number = 32) {
         this.game = game;
         this.sprite = spriteKey;
         this.group = this.game.add.group();
 
-        this.blockSize = 20.48;
-        this.blockScale = 0.02;
+        this.blockSize = 24;
+        this.blockScale = this.blockSize / spriteSize;
     }
     /**
      * Returns the Group for the platform(s).
@@ -103,7 +103,7 @@ export default class Platformer {
      * @param factor {number} The factor that influence the probability of get holes in the platform.
      */
     public generatePlatform(start :Phaser.Point, end :Phaser.Point, factor :number = 10) :Platformer {
-        let blocksNumber = Phaser.Point.distance(start, end);
+        let blocksNumber = Phaser.Point.distance(start, end) / this.blockSize;
         let platform = [];
         let x = start.x;
         let y = start.y;
