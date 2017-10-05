@@ -3,26 +3,22 @@ define(["require", "exports", "states/StateAbstract"], function (require, export
     Object.defineProperty(exports, "__esModule", { value: true });
     class GameStartState extends StateAbstract_1.default {
         preload() {
-            this.game.load.image('background', 'assets/treesbackground.png');
+            this.game.load.image('background', 'assets/backgrnd_vapor02.png');
         }
         create() {
             this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
             this.fullscreenBtn = this.input.keyboard.addKey(Phaser.KeyCode.F1);
             this.fullscreenBtn.onDown.add(goFullscreen, this);
             this.game.add.sprite(0, 0, 'background');
-            this.game.add.text(this.game.width / 2.5, 20, 'Casual Platform', {
-                font: 'Indie Flower',
-                fontSize: 35,
-                fontWeight: 'bold'
-            });
-            let startText = this.game.add.text(30, 150, 'Start', {
-                font: 'Indie Flower',
-                fontSize: 35
+            let startText = this.game.add.text(30, 150, 'PRESS START', {
+                font: 'VCR OSD MONO',
+                fontSize: 28,
+                fill: '#8795E8'
             });
             startText.inputEnabled = true;
             startText.events.onInputOver.add((item) => {
                 document.body.style.cursor = 'pointer';
-                item.addColor('#f00', 0);
+                item.addColor('#94D0FF', 0);
             }, this);
             startText.events.onInputDown.add(() => {
                 document.body.style.cursor = 'default';

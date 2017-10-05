@@ -26,18 +26,19 @@ export default class GamePlayState extends State {
     }
 
     preload() {
-        this.game.load.image('platform', 'assets/platform_1024x1024.png');
-        this.game.load.image('background', 'assets/treesbackground.png');
+        this.game.load.image('platform', 'assets/vaporblock.png');
+        this.game.load.image('background', 'assets/backgrnd_vapor01.png');
+        // this.game.load.image('platform', 'assets/platform_1024x1024.png');
+        // this.game.load.image('background', 'assets/treesbackground.png');
         this.game.load.spritesheet('hero', 'assets/hero_spritesheet.png', 21, 40);
     }
 
     create() {
         this.levelStartPos = new Phaser.Point(0, this.world.height - 40);
         this.levelEndPos = new Phaser.Point(this.world.width - 1, this.world.height - 40);
-        this.playerStartPos = new Phaser.Point(0, this.world.height - 40);
-        let groundStart = new Phaser.Point(0, this.world.height - 21);
-        let groundEnd = new Phaser.Point(this.world.width, this.world.height - 21);
-
+        this.playerStartPos = new Phaser.Point(0, this.world.height - 60);
+        let groundStart = new Phaser.Point(0, this.world.height - 20);
+        let groundEnd = new Phaser.Point(this.world.width, this.world.height - 20);
 
 
         this.game.add.sprite(0, 0, 'background');
@@ -45,8 +46,6 @@ export default class GamePlayState extends State {
         this.ground = new Platformer(this.game, 'platform');
         this.ground
             .generatePlatform(groundStart, groundEnd, 10 - this.difficult)
-            // .generatePlatformFromArray(380, this.world.bottom - 21, [1,2,2,3,4,5,6,7,8])
-            // .generatePlatformFromArray(600, 400, [0,-1,-1,0,0,-1,-1])
             .setImmovable(true);
         
         this.hero = new Hero(this.game, this.playerStartPos);
@@ -54,18 +53,9 @@ export default class GamePlayState extends State {
         // create the cursor key object
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
-        this.lifeText = this.game.add.text(32, 32, `Life: ${this.hero.getLife()}`, {
-            font: 'Indie Flower',
-            fontSize: 35,
-            fontWeight: 'bold',
-            fill: '#ff0044'
-        });
-
-        let levelText = this.game.add.text(this.world.centerX, 32, `The difficult for this level is ${this.difficult}`, {
-            font: 'Indie Flower',
-            fontSize: 26,
-            fontWeight: 'bold',
-            fill: '#ff0044'
+        this.lifeText = this.game.add.text(32, 32, `${this.hero.getLife()} - ${this.difficult}`, {
+            font: 'VCR OSD MONO',
+            fontSize: 32
         });
     }
 
@@ -107,7 +97,7 @@ export default class GamePlayState extends State {
                 return;
             } else {
                 this.game.camera.flash(0x000000, 200);
-                player.setPos(new Phaser.Point(0, this.world.height - 50));
+                player.setPos(new Phaser.Point(0, this.world.height - 60));
             }
         }
 
@@ -126,6 +116,6 @@ export default class GamePlayState extends State {
     }
 
     updateLifeText() {
-        this.lifeText.setText(`Life: ${this.hero.getLife()}`);
+        this.lifeText.setText(`${this.hero.getLife()} - ${this.difficult}`);
     }
 }
