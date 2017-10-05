@@ -22,13 +22,12 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
             this.levelStartPos = new Phaser.Point(0, this.world.height - 40);
             this.levelEndPos = new Phaser.Point(this.world.width - 1, this.world.height - 40);
             this.playerStartPos = new Phaser.Point(0, this.world.height - 60);
-            let groundStart = new Phaser.Point(0, this.world.height - 20);
-            let groundEnd = new Phaser.Point(this.world.width, this.world.height - 20);
+            let groundStart = new Phaser.Point(0, this.world.height - 24);
+            let groundEnd = new Phaser.Point(this.world.width, this.world.height - 24);
             this.game.add.sprite(0, 0, 'background');
             this.ground = new Platformer_1.default(this.game, 'platform');
             this.ground
                 .generatePlatform(groundStart, groundEnd, 10 - this.difficult)
-                .generatePlatformFromArray(24 * 17, this.world.bottom - 24, [1, 2, 2, 3, 4, 4, 4, 4, 0, 4, 4, 4, 5, 6, 7, 8])
                 .setImmovable(true);
             this.hero = new Hero_1.default(this.game, this.playerStartPos);
             this.cursors = this.game.input.keyboard.createCursorKeys();

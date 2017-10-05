@@ -37,8 +37,8 @@ export default class GamePlayState extends State {
         this.levelStartPos = new Phaser.Point(0, this.world.height - 40);
         this.levelEndPos = new Phaser.Point(this.world.width - 1, this.world.height - 40);
         this.playerStartPos = new Phaser.Point(0, this.world.height - 60);
-        let groundStart = new Phaser.Point(0, this.world.height - 20);
-        let groundEnd = new Phaser.Point(this.world.width, this.world.height - 20);
+        let groundStart = new Phaser.Point(0, this.world.height - 24);
+        let groundEnd = new Phaser.Point(this.world.width, this.world.height - 24);
 
 
         this.game.add.sprite(0, 0, 'background');
