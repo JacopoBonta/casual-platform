@@ -1,16 +1,25 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "characters/Character"], function (require, exports, Character_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class Hero {
-        constructor(game, initialPosition = { x: 0, y: 0 }, life = 10, velocity = 100, gravity = 1400) {
+    class Hero extends Character_1.default {
+        constructor(game, pos, life, speed, gravity) {
+            super(game);
             this.fps = 15;
-            this.game = game;
-            this.initialPos = initialPosition;
-            this.life = life;
-            this.velocity = velocity;
-            this.gravity = gravity;
-            this.sprite = this.game.add.sprite(this.initialPos.x, this.initialPos.y, 'hero', 0);
+            if (pos) {
+                this.spawnPos = pos;
+            }
+            if (life) {
+                this.life = life;
+            }
+            if (speed) {
+                this.speed = speed;
+            }
+            if (gravity) {
+                this.gravity = gravity;
+            }
+            this.sprite = this.game.add.sprite(this.spawnPos.x, this.spawnPos.y, 'hero', 0);
             this.setupSprite();
+            this.game.physics.arcade.enable(this.sprite);
             this.body = this.sprite.body;
             this.setupPhysiscs();
         }
@@ -21,47 +30,11 @@ define(["require", "exports"], function (require, exports) {
             this.sprite.animations.add('jump', [12]);
             this.sprite.animations.add('mid air', [48, 49], this.fps, true);
             this.sprite.animations.add('landing', [24]);
-            this.game.physics.arcade.enable(this.sprite);
         }
         setupPhysiscs() {
             this.body.setSize(10 / this.sprite.scale.x, 30 / this.sprite.scale.y, 5, 5);
-            this.body.gravity.y = this.getGravity();
+            this.body.gravity.y = this.gravity;
             this.body.collideWorldBounds = false;
-        }
-        getLife() {
-            return this.life;
-        }
-        getVelocity() {
-            return this.velocity;
-        }
-        getGravity() {
-            return this.gravity;
-        }
-        getPos() {
-            return new Phaser.Point(this.body.x, this.body.y);
-        }
-        setLife(life) {
-            this.life = life;
-            return this;
-        }
-        setVelocity(velocity) {
-            this.velocity = velocity;
-            return this;
-        }
-        setGravity(g) {
-            this.gravity = g;
-            return this;
-        }
-        setPos(pos) {
-            if (pos) {
-                this.body.x = pos.x;
-                this.body.y = pos.y;
-            }
-            else {
-                this.body.x = this.initialPos.x;
-                this.body.y = this.initialPos.y;
-            }
-            return this;
         }
         isTouchingDown() {
             return this.body.touching.down;
@@ -74,22 +47,22 @@ define(["require", "exports"], function (require, exports) {
         }
         stand() {
             this.sprite.animations.play('idle');
-            this.body.velocity.x = 0;
+            this.stop();
         }
-        goLeft(velocity) {
+        left(velocity) {
             this.sprite.scale.setTo(-1, 1);
             this.sprite.animations.play('run');
-            this.body.velocity.x = (velocity || this.getVelocity()) * -1;
+            this.moveLeft(velocity);
         }
-        goRight(velocity) {
+        right(velocity) {
             this.sprite.scale.setTo(1, 1);
             this.sprite.animations.play('run');
-            this.body.velocity.x = velocity || this.getVelocity();
+            this.moveRight(velocity);
         }
         jump(verticalSpeed) {
             if (this.isTouchingDown()) {
                 this.sprite.animations.play('jump');
-                this.body.velocity.y = (verticalSpeed || 350) * -1;
+                this.moveUp(verticalSpeed);
             }
         }
         fall() {
@@ -101,14 +74,7 @@ define(["require", "exports"], function (require, exports) {
             }
         }
         damage(amount) {
-            let life = this.getLife();
-            if (amount) {
-                life -= Math.abs(amount);
-            }
-            else {
-                life--;
-            }
-            this.setLife(life);
+            this.life -= Math.abs(amount) || 1;
             return this;
         }
     }

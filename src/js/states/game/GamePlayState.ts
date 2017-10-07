@@ -53,7 +53,7 @@ export default class GamePlayState extends State {
         // create the cursor key object
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
-        this.lifeText = this.game.add.text(32, 32, `${this.hero.getLife()} - ${this.difficult}`, {
+        this.lifeText = this.game.add.text(32, 32, `${this.hero.life} - ${this.difficult}`, {
             font: 'VCR OSD MONO',
             fontSize: 32
         });
@@ -66,9 +66,9 @@ export default class GamePlayState extends State {
         let hitGround = player.collide(this.ground.group);
 
         if (cursors.left.isDown) {
-            player.goLeft();
+            player.left();
         } else if (cursors.right.isDown) {
-            player.goRight();
+            player.right();
         } else {
             player.stand();
         }
@@ -81,23 +81,23 @@ export default class GamePlayState extends State {
             player.fall();
         }
 
-        if (player.getPos().x <= 0) {
-            player.goRight();
-        } else if (player.getPos().x >= this.game.world.width) {
-            player.goLeft();
-        }
+        /* if (player.pos().x <= 0) {
+            player.right();
+        } else if (player.pos().x >= this.game.world.width) {
+            player.left();
+        } */
 
         // check if the player fell down 
-        if(player.getPos().y >= this.game.world.height){
+        if(player.pos().y >= this.game.world.height){
             player.damage();
             this.updateLifeText();
-            if (player.getLife() <= 0) {
+            if (player.life <= 0) {
                 this.game.state.clearCurrentState();
                 this.game.state.start("GameoverState");
                 return;
             } else {
                 this.game.camera.flash(0x000000, 200);
-                player.setPos(new Phaser.Point(0, this.world.height - 60));
+                player.pos(new Phaser.Point(0, this.world.height - 60));
             }
         }
 
@@ -116,6 +116,6 @@ export default class GamePlayState extends State {
     }
 
     updateLifeText() {
-        this.lifeText.setText(`${this.hero.getLife()} - ${this.difficult}`);
+        this.lifeText.setText(`${this.hero.life} - ${this.difficult}`);
     }
 }

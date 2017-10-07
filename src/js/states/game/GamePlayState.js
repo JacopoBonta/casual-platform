@@ -31,7 +31,7 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
                 .setImmovable(true);
             this.hero = new Hero_1.default(this.game, this.playerStartPos);
             this.cursors = this.game.input.keyboard.createCursorKeys();
-            this.lifeText = this.game.add.text(32, 32, `${this.hero.getLife()} - ${this.difficult}`, {
+            this.lifeText = this.game.add.text(32, 32, `${this.hero.life} - ${this.difficult}`, {
                 font: 'VCR OSD MONO',
                 fontSize: 32
             });
@@ -41,10 +41,10 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
             let cursors = this.cursors;
             let hitGround = player.collide(this.ground.group);
             if (cursors.left.isDown) {
-                player.goLeft();
+                player.left();
             }
             else if (cursors.right.isDown) {
-                player.goRight();
+                player.right();
             }
             else {
                 player.stand();
@@ -55,23 +55,17 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
             if (!hitGround) {
                 player.fall();
             }
-            if (player.getPos().x <= 0) {
-                player.goRight();
-            }
-            else if (player.getPos().x >= this.game.world.width) {
-                player.goLeft();
-            }
-            if (player.getPos().y >= this.game.world.height) {
+            if (player.pos().y >= this.game.world.height) {
                 player.damage();
                 this.updateLifeText();
-                if (player.getLife() <= 0) {
+                if (player.life <= 0) {
                     this.game.state.clearCurrentState();
                     this.game.state.start("GameoverState");
                     return;
                 }
                 else {
                     this.game.camera.flash(0x000000, 200);
-                    player.setPos(new Phaser.Point(0, this.world.height - 60));
+                    player.pos(new Phaser.Point(0, this.world.height - 60));
                 }
             }
             if (player.collidePoint(this.levelEndPos)) {
@@ -86,7 +80,7 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
             this.game.debug.geom(this.levelEndPos, 'rgba(0, 255, 0, 1)');
         }
         updateLifeText() {
-            this.lifeText.setText(`${this.hero.getLife()} - ${this.difficult}`);
+            this.lifeText.setText(`${this.hero.life} - ${this.difficult}`);
         }
     }
     exports.default = GamePlayState;
