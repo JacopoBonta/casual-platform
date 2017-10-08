@@ -34,11 +34,11 @@ export default class GamePlayState extends State {
     }
 
     create() {
-        this.levelStartPos = new Phaser.Point(0, this.world.height - 40);
-        this.levelEndPos = new Phaser.Point(this.world.width - 1, this.world.height - 40);
-        this.playerStartPos = new Phaser.Point(0, this.world.height - 60);
-        let groundStart = new Phaser.Point(0, this.world.height - 24);
-        let groundEnd = new Phaser.Point(this.world.width, this.world.height - 24);
+        this.levelStartPos = new Phaser.Point(0, this.world.centerY + 40);
+        this.levelEndPos = new Phaser.Point(this.world.width - 1, this.world.centerY + 40);
+        this.playerStartPos = new Phaser.Point(20, this.world.centerY - 200);
+        let groundStart = new Phaser.Point(0, this.world.centerY + 60);
+        let groundEnd = new Phaser.Point(this.world.width, this.world.centerY + 60);
 
 
         this.game.add.sprite(0, 0, 'background');
@@ -65,9 +65,9 @@ export default class GamePlayState extends State {
 
         let hitGround = player.collide(this.ground.group);
 
-        if (cursors.left.isDown) {
+        if (cursors.left.isDown && player.pos().x > 0) {
             player.left();
-        } else if (cursors.right.isDown) {
+        } else if (cursors.right.isDown && player.pos().x < this.game.world.width) {
             player.right();
         } else {
             player.stand();
@@ -81,12 +81,6 @@ export default class GamePlayState extends State {
             player.fall();
         }
 
-        /* if (player.pos().x <= 0) {
-            player.right();
-        } else if (player.pos().x >= this.game.world.width) {
-            player.left();
-        } */
-
         // check if the player fell down 
         if(player.pos().y >= this.game.world.height){
             player.damage();
@@ -97,7 +91,7 @@ export default class GamePlayState extends State {
                 return;
             } else {
                 this.game.camera.flash(0x000000, 200);
-                player.pos(new Phaser.Point(0, this.world.height - 60));
+                player.pos(new Phaser.Point(0, this.world.centerY - 200));
             }
         }
 

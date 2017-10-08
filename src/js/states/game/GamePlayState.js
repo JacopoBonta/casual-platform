@@ -19,11 +19,11 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
             this.game.load.spritesheet('hero', 'assets/hero_spritesheet.png', 21, 40);
         }
         create() {
-            this.levelStartPos = new Phaser.Point(0, this.world.height - 40);
-            this.levelEndPos = new Phaser.Point(this.world.width - 1, this.world.height - 40);
-            this.playerStartPos = new Phaser.Point(0, this.world.height - 60);
-            let groundStart = new Phaser.Point(0, this.world.height - 24);
-            let groundEnd = new Phaser.Point(this.world.width, this.world.height - 24);
+            this.levelStartPos = new Phaser.Point(0, this.world.centerY + 40);
+            this.levelEndPos = new Phaser.Point(this.world.width - 1, this.world.centerY + 40);
+            this.playerStartPos = new Phaser.Point(20, this.world.centerY - 200);
+            let groundStart = new Phaser.Point(0, this.world.centerY + 60);
+            let groundEnd = new Phaser.Point(this.world.width, this.world.centerY + 60);
             this.game.add.sprite(0, 0, 'background');
             this.ground = new Platformer_1.default(this.game, 'platform');
             this.ground
@@ -40,10 +40,10 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
             let player = this.hero;
             let cursors = this.cursors;
             let hitGround = player.collide(this.ground.group);
-            if (cursors.left.isDown) {
+            if (cursors.left.isDown && player.pos().x > 0) {
                 player.left();
             }
-            else if (cursors.right.isDown) {
+            else if (cursors.right.isDown && player.pos().x < this.game.world.width) {
                 player.right();
             }
             else {
@@ -65,7 +65,7 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
                 }
                 else {
                     this.game.camera.flash(0x000000, 200);
-                    player.pos(new Phaser.Point(0, this.world.height - 60));
+                    player.pos(new Phaser.Point(0, this.world.centerY - 200));
                 }
             }
             if (player.collidePoint(this.levelEndPos)) {
