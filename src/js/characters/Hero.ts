@@ -17,7 +17,7 @@ export default class Hero extends Character {
             this.gravity = gravity;
         }
         this.sprite = this.game.add.sprite(this.spawnPos.x, this.spawnPos.y, 'hero', 0);
-        this.sprite.scale.setTo(1.25, 1.25);
+        // this.sprite.scale.setTo(1.25, 1.25);
         this.setupSprite();
         // Enable physics on the sprite
         this.game.physics.arcade.enable(this.sprite);
@@ -46,7 +46,7 @@ export default class Hero extends Character {
      * Helper function that setup the heros' body
      */
     private setupPhysiscs() :void {
-        // this.body.setSize(10 / this.sprite.scale.x, 30 / this.sprite.scale.y, 5, 5);
+        this.body.setSize(10 / this.sprite.scale.x, 30 / this.sprite.scale.y, 5, 5);
         this.body.gravity.y = this.gravity;
         this.body.collideWorldBounds = false;
     }
@@ -69,13 +69,13 @@ export default class Hero extends Character {
     }
 
     public left(velocity ?:number) :void {
-        this.sprite.scale.setTo(-1.25, 1.25);
+        this.sprite.scale.setTo(-1, 1);
         this.sprite.animations.play('run');
         this.moveLeft(velocity);
     }
 
     public right(velocity ?:number) :void {
-        this.sprite.scale.setTo(1.25, 1.25);
+        this.sprite.scale.setTo(1, 1);
         this.sprite.animations.play('run');
         this.moveRight(velocity);
     }

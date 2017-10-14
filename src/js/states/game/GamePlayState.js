@@ -2,7 +2,7 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class GamePlayState extends StateAbstract_1.default {
-        init(difficult = 2) {
+        init(difficult = 1) {
             if (difficult <= 0) {
                 this.difficult = 1;
             }
@@ -14,9 +14,11 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
             }
         }
         preload() {
+            this.game.load.spritesheet('hero', 'assets/hero_spritesheet.png', 21, 40);
             this.game.load.image('platform', 'assets/vaporblock.png');
             this.game.load.image('background', 'assets/backgrnd_vapor01.png');
-            this.game.load.spritesheet('hero', 'assets/hero_spritesheet.png', 21, 40);
+            this.game.load.image('palm', 'assets/vaporpalm.png');
+            this.game.load.image('japan', 'assets/vaporjapan.png');
         }
         create() {
             this.levelStartPos = new Phaser.Point(0, this.world.centerY + 40);
@@ -30,6 +32,9 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
                 .generatePlatform(groundStart, groundEnd, 10 - this.difficult)
                 .setImmovable(true);
             this.hero = new Hero_1.default(this.game, this.playerStartPos);
+            let palm = this.game.add.sprite(this.levelEndPos.x - 20, this.levelEndPos.y - 24, 'palm');
+            palm.anchor.setTo(0.5);
+            palm.scale.setTo(1 / 3);
             this.cursors = this.game.input.keyboard.createCursorKeys();
             this.lifeText = this.game.add.text(32, 32, `${this.hero.life} - ${this.difficult}`, {
                 font: 'VCR OSD MONO',
@@ -59,7 +64,6 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
                 player.damage();
                 this.updateLifeText();
                 if (player.life <= 0) {
-                    this.game.state.clearCurrentState();
                     this.game.state.start("GameoverState");
                     return;
                 }
@@ -71,13 +75,12 @@ define(["require", "exports", "states/StateAbstract", "characters/Hero", "Platfo
             if (player.collidePoint(this.levelEndPos)) {
                 console.log("Good job! You reach the end!");
                 player.body.velocity.x = 0;
-                this.game.state.clearCurrentState();
                 this.game.state.start("GamePlayState", true, false, this.difficult + 1);
             }
         }
         render() {
-            this.game.debug.geom(this.levelStartPos, 'rgba(255, 0, 0, 1)');
-            this.game.debug.geom(this.levelEndPos, 'rgba(0, 255, 0, 1)');
+            this.game.debug.spriteBounds(this.hero.sprite);
+            this.game.debug.spriteBounds(this.ground.group.getAt(1));
         }
         updateLifeText() {
             this.lifeText.setText(`${this.hero.life} - ${this.difficult}`);
