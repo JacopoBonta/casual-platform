@@ -1,18 +1,33 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "characters/Character"], function (require, exports, Character_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class Hero {
-        constructor(game, x, y) {
-            this.fps = 15;
-            this.game = game;
-            this.initialPos = new Phaser.Point(x || 32, y || 32);
-            this.life = 10;
-            this.velocity = 100;
-            this.gravity = 1400;
-            this.sprite = this.game.add.sprite(this.initialPos.x, this.initialPos.y, 'hero', 0);
+    class Hero extends Character_1.default {
+        constructor(game, pos, life, speed, gravity) {
+            super(game);
+            this._fps = 15;
+            if (pos) {
+                this.spawnPos = pos;
+            }
+            if (life) {
+                this.life = life;
+            }
+            if (speed) {
+                this.speed = speed;
+            }
+            if (gravity) {
+                this.gravity = gravity;
+            }
+            this.sprite = this.game.add.sprite(this.spawnPos.x, this.spawnPos.y, 'hero', 0);
             this.setupSprite();
+            this.game.physics.arcade.enable(this.sprite);
             this.body = this.sprite.body;
             this.setupPhysiscs();
+        }
+        get fps() {
+            return this._fps;
+        }
+        set fps(fps) {
+            this._fps = fps;
         }
         setupSprite() {
             this.sprite.anchor.setTo(.5, .5);
@@ -21,47 +36,11 @@ define(["require", "exports"], function (require, exports) {
             this.sprite.animations.add('jump', [12]);
             this.sprite.animations.add('mid air', [48, 49], this.fps, true);
             this.sprite.animations.add('landing', [24]);
-            this.game.physics.arcade.enable(this.sprite);
         }
         setupPhysiscs() {
             this.body.setSize(10 / this.sprite.scale.x, 30 / this.sprite.scale.y, 5, 5);
-            this.body.gravity.y = this.getGravity();
+            this.body.gravity.y = this.gravity;
             this.body.collideWorldBounds = false;
-        }
-        getLife() {
-            return this.life;
-        }
-        getVelocity() {
-            return this.velocity;
-        }
-        getGravity() {
-            return this.gravity;
-        }
-        getPos() {
-            return new Phaser.Point(this.body.x, this.body.y);
-        }
-        setLife(life) {
-            this.life = life;
-            return this;
-        }
-        setVelocity(velocity) {
-            this.velocity = velocity;
-            return this;
-        }
-        setGravity(g) {
-            this.gravity = g;
-            return this;
-        }
-        setPos(pos) {
-            if (pos) {
-                this.body.x = pos.x;
-                this.body.y = pos.y;
-            }
-            else {
-                this.body.x = this.initialPos.x;
-                this.body.y = this.initialPos.y;
-            }
-            return this;
         }
         isTouchingDown() {
             return this.body.touching.down;
@@ -69,24 +48,27 @@ define(["require", "exports"], function (require, exports) {
         collide(obj) {
             return this.game.physics.arcade.collide(this.sprite, obj);
         }
+        collidePoint(point) {
+            return this.sprite.getBounds().contains(point.x, point.y);
+        }
         stand() {
             this.sprite.animations.play('idle');
-            this.body.velocity.x = 0;
+            this.stop();
         }
-        goLeft(velocity) {
+        left(velocity) {
             this.sprite.scale.setTo(-1, 1);
             this.sprite.animations.play('run');
-            this.body.velocity.x = (velocity || this.getVelocity()) * -1;
+            this.moveLeft(velocity);
         }
-        goRight(velocity) {
+        right(velocity) {
             this.sprite.scale.setTo(1, 1);
             this.sprite.animations.play('run');
-            this.body.velocity.x = velocity || this.getVelocity();
+            this.moveRight(velocity);
         }
         jump(verticalSpeed) {
             if (this.isTouchingDown()) {
                 this.sprite.animations.play('jump');
-                this.body.velocity.y = (verticalSpeed || 350) * -1;
+                this.moveUp(verticalSpeed);
             }
         }
         fall() {
@@ -98,14 +80,7 @@ define(["require", "exports"], function (require, exports) {
             }
         }
         damage(amount) {
-            let life = this.getLife();
-            if (amount) {
-                life -= Math.abs(amount);
-            }
-            else {
-                life--;
-            }
-            this.setLife(life);
+            this.life -= Math.abs(amount) || 1;
             return this;
         }
     }

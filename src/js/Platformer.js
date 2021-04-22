@@ -2,12 +2,12 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Platformer {
-        constructor(game, spriteKey) {
+        constructor(game, spriteKey, spriteSize = 32) {
             this.game = game;
             this.sprite = spriteKey;
             this.group = this.game.add.group();
-            this.blockSize = 20.48;
-            this.blockScale = 0.02;
+            this.blockSize = 24;
+            this.blockScale = this.blockSize / spriteSize;
         }
         getGroup() {
             return this.group;
@@ -53,11 +53,12 @@ define(["require", "exports"], function (require, exports) {
             }, this, false, enable);
             return this;
         }
-        generatePlatform(x, y, length, factor) {
-            let blocksNumber = length;
+        generatePlatform(start, end, factor = 10) {
+            let blocksNumber = Phaser.Point.distance(start, end) / this.blockSize;
             let platform = [];
+            let x = start.x;
+            let y = start.y;
             let consecutive = 0;
-            factor = factor || 10;
             for (let i = 0; i < blocksNumber; i++) {
                 if (i <= 1 || i >= blocksNumber - 1 || consecutive >= 2 || Math.floor(Math.random() * 10) <= factor) {
                     consecutive = 0;
